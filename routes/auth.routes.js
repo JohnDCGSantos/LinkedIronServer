@@ -1,6 +1,8 @@
+const router = require('express').Router()
+const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User.model')
-const { isAuthenticated } = require('../middlewares/jwt.middleware.js')
+const { isAuthenticated } = require('../middlewares/jwt.middleware')
 
 router.get('/', (req, res, next) => {
   res.json('All good in auth')
@@ -15,10 +17,12 @@ router.post('/signup', async (req, res) => {
 
   try {
     const newUser = await User.create({
-      userName: payload.userName,
+      username: payload.username,
+      email: payload.email,
       password: passwordHash,
-      course: payload.course,
-      campus: payload.campus,
+      image: payload.image,
+      bootcamp: payload.bootcamp,
+      graduationDate: payload.graduationDate,
     })
     res.status(201).json({ message: 'User created' })
     console.log(
@@ -35,7 +39,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   const payload = req.body // { email: 'someEmail', password '1234'}
   /* Check if the user exists */
-  const potentialUser = await User.findOne({ userName: payload.userName })
+  const potentialUser = await User.findOne({ username: payload.username })
   if (potentialUser) {
     /* Check if the password is correct */
     if (bcrypt.compareSync(payload.password, potentialUser.password)) {
