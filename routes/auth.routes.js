@@ -1,60 +1,17 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/User.model')
-const { isAuthenticated } = require('../middlewares/jwt.middleware.js')
+const router = require('express').Router()
+const {signUp, login}= require ('../controllers/authenticationController')
+const { isAuthenticated } = require('../middlewares/jwt.middleware');
 
 router.get('/', (req, res, next) => {
   res.json('All good in auth')
 })
 
 /* POST route to signup */
-router.post('/signup', async (req, res) => {
-  const payload = req.body // { email: 'someEmail', password '1234'}
+router.post('/signup', signUp);
 
-  const salt = bcrypt.genSaltSync(13)
-  const passwordHash = bcrypt.hashSync(payload.password, salt)
-
-  try {
-    const newUser = await User.create({
-      userName: payload.userName,
-      password: passwordHash,
-      course: payload.course,
-      campus: payload.campus,
-    })
-    res.status(201).json({ message: 'User created' })
-    console.log(
-      'Here is your new User------------------>>>>>>',
-      newUser,
-      '<<<<<<------------------'
-    )
-  } catch (error) {
-    console.log(error)
-    res.status(500).json(error)
-  }
-})
 /* POST route to login */
-router.post('/login', async (req, res) => {
-  const payload = req.body // { email: 'someEmail', password '1234'}
-  /* Check if the user exists */
-  const potentialUser = await User.findOne({ userName: payload.userName })
-  if (potentialUser) {
-    /* Check if the password is correct */
-    if (bcrypt.compareSync(payload.password, potentialUser.password)) {
-      /* Sign the JWT */
-      const authToken = jwt.sign({ userId: potentialUser._id }, process.env.TOKEN_SECRET, {
-        algorithm: 'HS256',
-        expiresIn: '6h',
-      })
-      // Sending back the token to the front
-      res.status(202).json({ token: authToken })
-    } else {
-      /* Incorrect password */
-      res.status(403).json({ errorMessage: 'Password invalid' })
-    }
-  } else {
-    /* No user found */
-    res.status(403).json({ errorMessage: 'No user found' })
-  }
-})
+router.post('/login', login);
+
 /* GET route to verify the token */
 router.get('/verify', isAuthenticated, (req, res) => {
   console.log(req.auth)
