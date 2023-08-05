@@ -37,7 +37,7 @@ const login = async (req, res) => {
   try {
     const payload = req.body; // { email: 'someEmail', password '1234'}
     /* Check if the user exists */
-    const potentialUser = await User.findOne({ username: payload.username });
+    const potentialUser = await User.findOne({ email: payload.email });
     if (potentialUser) {
       /* Check if the password is correct */
       if (bcrypt.compareSync(payload.password, potentialUser.password)) {
