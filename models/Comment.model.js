@@ -9,17 +9,17 @@ const commentSchema = new Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
     post: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post', // Reference to the Post model
-        required: true,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post", // Reference to the Post model
+      required: true,
+    },
     createdAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
   },
   {

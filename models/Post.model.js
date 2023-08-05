@@ -4,28 +4,28 @@ const { Schema, model } = require("mongoose");
 const postSchema = new Schema(
   {
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
     },
     createdAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
     content: {
       type: String,
       required: true,
     },
     likes: {
-        type: Number,
-        default: 0,
-      },
+      type: Number,
+      default: 0,
+    },
     category: {
-        enum: ['careers', 'events', 'profiles', 'other'],
-        default: 'profiles',
+      enum: ["careers", "events", "profiles", "other"],
+      default: "profiles",
     },
   },
   {
