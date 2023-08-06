@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const User = require('../models/User.model')
+const { isAuthenticated, extractUserId } = require('../middlewares/jwt.middleware')
+
 const {
   getUsers,
   getUserProfile,
@@ -7,7 +9,9 @@ const {
   deleteUser,
 } = require('../controllers/userController')
 
-//TODO: ADD MIDDLEWARES
+router.use(isAuthenticated);
+router.use(extractUserId);
+
 router.get('/', getUsers)
 
 router.put('/:userId', updateUserData)
