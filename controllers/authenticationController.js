@@ -41,9 +41,13 @@ const login = async (req, res) => {
     if (potentialUser) {
       /* Check if the password is correct */
       if (bcrypt.compareSync(payload.password, potentialUser.password)) {
-        /* Sign the JWT */
+        delete potentialUser.password;
+        
+        // Create an object that will be set as the token payload
+        const payload = potentialUser.toJSON();
+
         const authToken = jwt.sign(
-          { userId: potentialUser._id },
+          payload,
           process.env.TOKEN_SECRET,
           {
             algorithm: "HS256",
