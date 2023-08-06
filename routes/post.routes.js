@@ -1,4 +1,6 @@
 const express = require('express')
+const { isAuthenticated, extractUserId } = require('../middlewares/jwt.middleware')
+
 const router = express.Router()
 const {
   createPost,
@@ -8,6 +10,10 @@ const {
   unlikePost,
   getAllPosts,
 } = require('../controllers/postController')
+
+router.use(isAuthenticated);
+router.use(extractUserId);
+
 router.post('/posts', createPost)
 
 router.get('/posts', getAllPosts)
