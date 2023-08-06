@@ -10,7 +10,7 @@ const createPost = async (req, res) => {
       return res.status(404).json({ error: 'User not found.' })
     }
 
-    const postobj = { ...req.body, category: 'profiles' };
+    const postobj = { category: 'profiles', ...req.body };
     postobj.author = user.id;
     const post = new Post(postobj)
     await post.save()
