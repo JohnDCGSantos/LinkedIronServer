@@ -16,19 +16,19 @@ require('./config')(app)
 
 // 👇 Start handling routes here
 const indexRoutes = require('./routes/index.routes')
-app.use('/api', indexRoutes);
+app.use('/api', indexRoutes)
 
 const authRoutes = require('./routes/auth.routes')
-app.use('/auth', authRoutes);
+app.use('/auth', authRoutes)
 
-const userRoutes= require('./routes/users.routes')
-app.use('/users', userRoutes);
+const userRoutes = require('./routes/users.routes')
+app.use('/users', userRoutes)
 
-const commentRoutes= require('./routes/comment.route')
-app.use('/comments', commentRoutes);
+const commentRoutes = require('./routes/comment.route')
+app.use('/comments', commentRoutes)
 
-const followRoutes= require('./routes/follow.route')
-app.use('/follow', followRoutes);
+const followRoutes = require('./routes/follow.route')
+app.use('/follow', followRoutes)
 
 const postRoutes = require('./routes/post.routes')
 app.use('/posts', postRoutes)

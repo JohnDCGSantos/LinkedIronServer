@@ -1,20 +1,23 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const {
   createPost,
   updatePost,
   deletePost,
   likePost,
   unlikePost,
-} = require("../controllers/postController");
-router.post("/posts", createPost);
+  getAllPosts,
+} = require('../controllers/postController')
+router.post('/posts', createPost)
 
-router.put("/posts/:postId", updatePost);
+router.get('/posts', getAllPosts)
 
-router.delete("/posts/:postId", deletePost);
+router.put('/posts/:postId', updatePost)
 
-router.post("/posts/:postId/like", likePost);
+router.delete('/posts/:postId', deletePost)
 
-router.delete("/posts/:postId/like", unlikePost);
+router.post('/posts/:postId/like', likePost)
 
-module.exports = router;
+router.delete('/posts/:postId/like', unlikePost)
+
+module.exports = router
