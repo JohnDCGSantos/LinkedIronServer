@@ -14,8 +14,7 @@ router.post('/login', login)
 
 /* GET route to verify the token */
 router.get('/verify', isAuthenticated, (req, res) => {
-  console.log(req.auth)
-  res.json('Ok')
+  res.status(200).json(req.payload);
 })
 
 module.exports = router
