@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const usersRoutes= require('../routes/users.routes')
+const usersRoutes = require('../routes/users.routes')
 
 router.get('/', (req, res, next) => {
   res.json('LinkedIron')
