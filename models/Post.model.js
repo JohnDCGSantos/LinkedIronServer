@@ -1,18 +1,26 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
 
 const postSchema = new Schema(
   {
+    author: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
     content: {
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-
+    likes: {
+      type: Number,
+      default: 0,
     },
     category: {
       type: String,
@@ -23,8 +31,8 @@ const postSchema = new Schema(
   {
     timestamps: true,
   }
-)
+);
 
-const Post = model('Post', postSchema)
+const Post = model("Post", postSchema);
 
-module.exports = Post
+module.exports = Post;
