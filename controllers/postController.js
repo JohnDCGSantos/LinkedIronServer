@@ -4,13 +4,18 @@ const User = require('../models/User.model')
 /****Create a Post ****/
 const createPost = async (req, res) => {
   try {
-    const { userId, content } = req.body
+    const { userId, title, content, image, category } = req.body
     const user = await User.findById(userId)
     if (!user) {
       return res.status(404).json({ error: 'User not found.' })
     }
 
-    const post = new Post({ user: author, content })
+    const post = new Post({
+      title,
+      content,
+      image,
+      category
+    })
     await post.save()
     res.status(201).json(post)
   } catch (error) {
