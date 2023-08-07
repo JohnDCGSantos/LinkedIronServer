@@ -17,6 +17,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required.'],
+      select: false, // Exclude password field by default
     },
     image: {
       type: String, //URL for the user's profile picture
