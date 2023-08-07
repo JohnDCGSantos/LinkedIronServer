@@ -93,7 +93,7 @@ const unlikePost = async (req, res) => {
 /*get all posts*/
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user', 'username')
+    const posts = await Post.find().populate('author')
     res.json(posts)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the posts.' })
