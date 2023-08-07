@@ -37,14 +37,14 @@ const login = async (req, res) => {
   try {
     const payload = req.body; // { email: 'someEmail', password '1234'}
     /* Check if the user exists */
-    const potentialUser = await User.findOne({ email: payload.email });
+    const potentialUser = await User.findOne({ email: payload.email }).select("+password");
     if (potentialUser) {
       /* Check if the password is correct */
       if (bcrypt.compareSync(payload.password, potentialUser.password)) {
-        delete potentialUser.password;
         
         // Create an object that will be set as the token payload
         const payload = potentialUser.toJSON();
+        delete payload.password;
 
         const authToken = jwt.sign(
           payload,

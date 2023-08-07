@@ -14,8 +14,8 @@ router.use(extractUserId);
 
 router.get('/', getUsers)
 
-router.put('/:userId', updateUserData)
+router.put('/', updateUserData)
 
-router.delete('/:userId', deleteUser)
+router.delete('/', deleteUser)
 
 module.exports = router
