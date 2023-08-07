@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const commentSchema = new Schema(
   {
     content: {
@@ -14,16 +13,12 @@ const commentSchema = new Schema(
     },
     post: {
         type: Schema.Types.ObjectId,
-        ref: 'Post', // Reference to the Post model
+        ref: 'Post',
         required: true,
       },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );

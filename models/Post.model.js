@@ -24,9 +24,13 @@ const postSchema = new Schema(
     },
     category: {
       type: String,
-      enum: ['careers', 'events', 'profiles', 'other'], // Corrected the enum property
+      enum: ['careers', 'events', 'profiles', 'other'],
       default: 'profiles',
     },
+    comments: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    }],
   },
   {
     timestamps: true,
