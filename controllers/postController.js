@@ -24,10 +24,10 @@ const createPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
-    const { content } = req.body
+    const payload = req.body
     const post = await Post.findByIdAndUpdate(
       req.params.postId,
-      { $set: { content } },
+      { $set: payload },
       { new: true }
     )
     if (!post) {
@@ -100,4 +100,20 @@ const getAllPosts = async (req, res) => {
   }
 }
 
-module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts }
+/*get one post*/
+
+const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.postId; 
+       const post = await Post.findById(postId).populate('author');
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found.' });
+    }
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the post.' });
+  }
+};
+
+
+module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts, getPostById }

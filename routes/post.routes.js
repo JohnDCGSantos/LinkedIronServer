@@ -9,21 +9,24 @@ const {
   likePost,
   unlikePost,
   getAllPosts,
+  getPostById,
 } = require('../controllers/postController')
 
 router.use(isAuthenticated);
 router.use(extractUserId);
 
-router.post('/posts', createPost)
+router.post('/', createPost)
 
-router.get('/posts', getAllPosts)
+router.get('/:postId', getPostById)
 
-router.put('/posts/:postId', updatePost)
+router.get('/', getAllPosts)
 
-router.delete('/posts/:postId', deletePost)
+router.put('/:postId', updatePost)
 
-router.post('/posts/:postId/like', likePost)
+router.delete('/:postId', deletePost)
 
-router.delete('/posts/:postId/like', unlikePost)
+router.post('/:postId/like', likePost)
+
+router.delete('/:postId/like', unlikePost)
 
 module.exports = router
