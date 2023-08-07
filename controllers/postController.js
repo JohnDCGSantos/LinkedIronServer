@@ -19,34 +19,13 @@ const createPost = async (req, res) => {
     res.status(500).json({ error: 'An error occured while creating a post' })
   }
 }
-/*get all posts*/
-
-const getAllPosts = async (req, res) => {
-  try {
-    const userId = req.userId
-    const user = await User.findById(userId)
-    if (!user) {
-      return res.status(404).json({ error: 'User not found.' })
-    }
-    const postobj = { category: 'profiles', ...req.body }
-    postobj.author = user.id
-    const posts = await Post.find(postobj).populate('user', 'username')
-    res.json(posts)
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching the posts.' })
-  }
-}
 
 /****Update a Post ****/
 
 const updatePost = async (req, res) => {
   try {
-    const { content } = req.body
-    const post = await Post.findByIdAndUpdate(
-      req.params.postId,
-      { $set: { content } },
-      { new: true }
-    )
+    const payload = req.body
+    const post = await Post.findByIdAndUpdate(req.params.postId, { $set: payload }, { new: true })
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
@@ -107,5 +86,37 @@ const unlikePost = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while unliking the post.' })
   }
 }
+/*get all posts*/
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().populate('author')
+    res.json(posts)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the posts.' })
+  }
+}
 
-module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts }
+/*get one post*/
+
+const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.postId
+    const post = await Post.findById(postId).populate('author')
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found.' })
+    }
+    res.json(post)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the post.' })
+  }
+}
+
+module.exports = {
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  unlikePost,
+  getAllPosts,
+  getPostById,
+}
