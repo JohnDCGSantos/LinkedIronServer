@@ -25,11 +25,7 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const payload = req.body
-    const post = await Post.findByIdAndUpdate(
-      req.params.postId,
-      { $set: payload },
-      { new: true }
-    )
+    const post = await Post.findByIdAndUpdate(req.params.postId, { $set: payload }, { new: true })
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
@@ -104,16 +100,23 @@ const getAllPosts = async (req, res) => {
 
 const getPostById = async (req, res) => {
   try {
-    const postId = req.params.postId; 
-       const post = await Post.findById(postId).populate('author');
+    const postId = req.params.postId
+    const post = await Post.findById(postId).populate('author')
     if (!post) {
-      return res.status(404).json({ error: 'Post not found.' });
+      return res.status(404).json({ error: 'Post not found.' })
     }
-    res.json(post);
+    res.json(post)
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching the post.' });
+    res.status(500).json({ error: 'An error occurred while fetching the post.' })
   }
-};
+}
 
-
-module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts, getPostById }
+module.exports = {
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  unlikePost,
+  getAllPosts,
+  getPostById,
+}

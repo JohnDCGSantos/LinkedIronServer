@@ -29,24 +29,19 @@ const getUserProfile = async (req, res) => {
 
 const updateUserData = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.userId,  
-      req.body, 
-      { new: true } 
-    );
+    const updatedUser = await User.findByIdAndUpdate(req.userId, req.body, { new: true })
 
-    if (updatedUser){
-      res.json(updatedUser);
-      console.log(updatedUser);
-    }
-    else{
-      res.status(500).error("Failed to update user")
+    if (updatedUser) {
+      res.json(updatedUser)
+      console.log(updatedUser)
+    } else {
+      res.status(500).error('Failed to update user')
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    console.log(error)
+    res.status(500).json(error)
   }
-};
+}
 
 /****Delete User Data ****/
 
