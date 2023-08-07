@@ -6,6 +6,7 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
+
     title: {
       type: String,
       required: true,
