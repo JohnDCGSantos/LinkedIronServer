@@ -107,5 +107,14 @@ const unlikePost = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while unliking the post.' })
   }
 }
+/*get all posts*/
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().populate('author')
+    res.json(posts)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the posts.' })
+  }
+}
 
 module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts }
