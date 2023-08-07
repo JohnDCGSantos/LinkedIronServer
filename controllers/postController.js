@@ -19,23 +19,6 @@ const createPost = async (req, res) => {
     res.status(500).json({ error: 'An error occured while creating a post' })
   }
 }
-/*get all posts*/
-
-const getAllPosts = async (req, res) => {
-  try {
-    const userId = req.userId
-    const user = await User.findById(userId)
-    if (!user) {
-      return res.status(404).json({ error: 'User not found.' })
-    }
-    const postobj = { category: 'profiles', ...req.body }
-    postobj.author = user.id
-    const posts = await Post.find(postobj).populate('user', 'username')
-    res.json(posts)
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching the posts.' })
-  }
-}
 
 /****Update a Post ****/
 
