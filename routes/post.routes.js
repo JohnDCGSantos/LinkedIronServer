@@ -1,7 +1,6 @@
 const express = require('express')
-const { isAuthenticated, extractUserId } = require('../middlewares/jwt.middleware')
-
 const router = express.Router()
+const { isAuthenticated, extractUserId } = require('../middlewares/jwt.middleware')
 const {
   createPost,
   updatePost,
@@ -9,23 +8,24 @@ const {
   likePost,
   unlikePost,
   getAllPosts,
+  getPostById,
 } = require('../controllers/postController')
+const { createComment, updateComment, deleteComment } = require('../controllers/commentController');
 
 router.use(isAuthenticated);
 router.use(extractUserId);
 
-router.post('/posts', createPost)
+router.get('/', getAllPosts)
+router.get('/:postId', getPostById)
+router.post('/', createPost)
+router.put('/:postId', updatePost)
+router.delete('/:postId', deletePost)
 
-router.get('/posts', getAllPosts)
+router.post('/:postId/like', likePost)
+router.delete('/:postId/like', unlikePost)
 
-router.put('/posts/:postId', updatePost)
-
-router.delete('/posts/:postId', deletePost)
-
-router.post("/posts/:postId/like", likePost);
-
-router.post('/posts/:postId/like', likePost)
-
-router.delete('/posts/:postId/like', unlikePost)
+router.post('/:postId/comment', createComment);
+router.put('/:postId/comment/:commentId', updateComment);
+router.delete('/:postId/comment/:commentId', deleteComment);
 
 module.exports = router

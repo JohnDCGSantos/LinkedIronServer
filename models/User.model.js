@@ -17,6 +17,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required.'],
+      select: false, // Exclude password field by default
     },
     image: {
       type: String, //URL for the user's profile picture
@@ -29,6 +30,8 @@ const userSchema = new Schema(
       type: Date,
       required: true,
     },
+    following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

@@ -4,14 +4,14 @@ const User = require('../models/User.model')
 /****Create a Post ****/
 const createPost = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.userId
     const user = await User.findById(userId)
     if (!user) {
       return res.status(404).json({ error: 'User not found.' })
     }
 
-    const postobj = { category: 'profiles', ...req.body };
-    postobj.author = user.id;
+    const postobj = { category: 'profiles', ...req.body }
+    postobj.author = user.id
     const post = new Post(postobj)
     await post.save()
     res.status(201).json(post)
@@ -24,12 +24,8 @@ const createPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
-    const { content } = req.body
-    const post = await Post.findByIdAndUpdate(
-      req.params.postId,
-      { $set: { content } },
-      { new: true }
-    )
+    const payload = req.body
+    const post = await Post.findByIdAndUpdate(req.params.postId, { $set: payload }, { new: true })
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
@@ -93,11 +89,56 @@ const unlikePost = async (req, res) => {
 /*get all posts*/
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('author')
+    const posts = await Post.find()
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' }, // Sort comments by createdAt in descending order
+        },
+      })
     res.json(posts)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the posts.' })
   }
 }
 
-module.exports = { createPost, updatePost, deletePost, likePost, unlikePost, getAllPosts }
+/*get one post*/
+
+const getPostById = async (req, res) => {
+  try {
+    const postId = req.params.postId
+    const post = await Post.findById(postId)
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' }, // Sort comments by createdAt in descending order
+        },
+      })
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found.' })
+    }
+    res.json(post)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the post.' })
+  }
+}
+
+module.exports = {
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  unlikePost,
+  getAllPosts,
+  getPostById,
+}
