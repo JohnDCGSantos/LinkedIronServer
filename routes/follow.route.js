@@ -12,11 +12,10 @@ const { isAuthenticated, extractUserId } = require('../middlewares/jwt.middlewar
 router.use(isAuthenticated)
 router.use(extractUserId)
 
-//router.post('/users/:userId/follow', followUser);
 router.post('/users/:userId/follow', followUser)
 
 router.delete('/users/:userId/follow', unfollowUser)
-router.get('/following', getFollowingUsers) // Add this route to get following users
-router.get('/followers', getFollowerUsers) // Add this route to get following users
+router.get('/following', getFollowingUsers)
+router.get('/followers', getFollowerUsers)
 
 module.exports = router
