@@ -22,6 +22,39 @@ const followUser = async (req, res) => {
   }
 }
 
+const getFollowingUsers = async (req, res) => {
+  try {
+    const { userId } = req
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' })
+    }
+
+    const followingUserIds = user.following
+    const followingUsers = await User.find({ _id: { $in: followingUserIds } })
+
+    res.json(followingUsers)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching following users.' })
+  }
+}
+const getFollowerUsers = async (req, res) => {
+  try {
+    const { userId } = req
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' })
+    }
+
+    const followersUserIds = user.followers
+    const followerUsers = await User.find({ _id: { $in: followersUserIds } })
+
+    res.json(followerUsers)
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching following users.' })
+  }
+}
+
 /**** Unfollow a User****/
 const unfollowUser = async (req, res) => {
   try {
@@ -51,4 +84,6 @@ const unfollowUser = async (req, res) => {
 module.exports = {
   followUser,
   unfollowUser,
+  getFollowingUsers,
+  getFollowerUsers,
 }
