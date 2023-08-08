@@ -5,18 +5,25 @@ const User = require("../models/User.model");
 /****Create a Comment****/
 const createComment = async (req, res) => {
   try {
-    const { userId, postId, content } = req.body;
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found." });
-    }
+    const postId = req.params.postId;
+    const userId = req.userId;
+    const { content } = req.body;
+
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: "Post not found." });
     }
-    const comment = new Comment({ user: userId, post: postId, content });
+    const comment = new Comment({ author: userId, post: postId, content });
     await comment.save();
-    res.status(201).json(comment);
+
+    post.comments.push(comment._id);
+    await post.save();
+
+    const populatedComment = await Comment.findById(comment._id)
+      .populate("author")
+      .exec();
+
+    res.status(201).json(populatedComment);
   } catch (error) {
     res
       .status(500)

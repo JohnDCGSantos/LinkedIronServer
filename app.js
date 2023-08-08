@@ -24,9 +24,6 @@ app.use('/auth', authRoutes)
 const userRoutes = require('./routes/users.routes')
 app.use('/users', userRoutes)
 
-const commentRoutes = require('./routes/comment.route')
-app.use('/comments', commentRoutes)
-
 const followRoutes = require('./routes/follow.route')
 app.use('/follow', followRoutes)
 

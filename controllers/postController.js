@@ -89,7 +89,18 @@ const unlikePost = async (req, res) => {
 /*get all posts*/
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('author')
+    const posts = await Post.find()
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' }, // Sort comments by createdAt in descending order
+        },
+      })
     res.json(posts)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the posts.' })
@@ -101,7 +112,18 @@ const getAllPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   try {
     const postId = req.params.postId
-    const post = await Post.findById(postId).populate('author')
+    const post = await Post.findById(postId)
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' }, // Sort comments by createdAt in descending order
+        },
+      })
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
