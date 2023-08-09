@@ -4,9 +4,9 @@ const postSchema = new Schema(
   {
     author: {
       type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
-
     title: {
       type: String,
       required: true,
@@ -25,7 +25,6 @@ const postSchema = new Schema(
         ref: 'User',
       },
     ],
-
     category: {
       type: String,
       enum: ['careers', 'events', 'profiles', 'other'],
@@ -35,6 +34,11 @@ const postSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: 'Comment',
+      },
+    ],
+    media: [
+      {
+        type: String,
       },
     ],
   },

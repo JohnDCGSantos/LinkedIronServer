@@ -65,7 +65,22 @@ const likePost = async (req, res) => {
     }
     res.json(post)
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while liking the post.' })
+    console.log('like post error', error)
+  }
+}
+
+/*** Get Post Likes ***/
+const getNumberLikes = async (req, res) => {
+  try {
+    const postId = req.params.postId
+    const post = await Post.findById(postId)
+    if (!post) {
+      res.status(404).json({ error: 'not found' })
+    }
+    const likesCount = post.likes.length
+    res.status(200).json({ likesCount })
+  } catch (error) {
+    res.status(500).json({ error: 'An error occured while fetching the user profile.' })
   }
 }
 
@@ -73,21 +88,23 @@ const likePost = async (req, res) => {
 
 const unlikePost = async (req, res) => {
   try {
-    const { userId } = req.body
+    const { postId } = req.body
     const post = await Post.findByIdAndUpdate(
       req.params.postId,
-      { $pull: { likes: userId } },
+      { $pull: { likes: req.payload._id } },
       { new: true }
     )
     if (!post) {
       return res.status(404).json({ error: 'Post not found.' })
     }
+
     res.json(post)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while unliking the post.' })
   }
 }
-//Get all posts
+
+/*get all posts*/
 const getAllPosts = async (req, res) => {
   console.log(req.payload)
   try {
@@ -165,6 +182,7 @@ module.exports = {
   updatePost,
   deletePost,
   likePost,
+  getNumberLikes,
   unlikePost,
   getAllPosts,
   getPostById,
