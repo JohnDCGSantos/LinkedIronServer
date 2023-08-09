@@ -6,7 +6,6 @@ const postSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
-
     title: {
       type: String,
       required: true,
@@ -31,6 +30,9 @@ const postSchema = new Schema(
     comments: [{
       type: Schema.Types.ObjectId,
       ref: 'Comment',
+    }],
+    media: [{
+      type: String,
     }],
   },
   {

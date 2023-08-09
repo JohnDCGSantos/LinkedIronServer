@@ -20,7 +20,7 @@ const userSchema = new Schema(
       select: false, // Exclude password field by default
     },
     image: {
-      type: String, //URL for the user's profile picture
+      type: String,
     },
     bootcamp: {
       type: String,
