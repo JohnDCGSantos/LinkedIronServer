@@ -111,7 +111,7 @@ const getAllPosts = async (req, res) => {
     const currentUser = await User.findById(req.payload._id)
 
     // Find posts by authors the user is following
-    const posts = await Post.find({ author: { $in: currentUser.following } })
+    const followingPosts = await Post.find({ author: { $in: currentUser.following } })
       .populate('author')
       .populate({
         path: 'comments',
@@ -123,8 +123,21 @@ const getAllPosts = async (req, res) => {
           sort: { createdAt: 'desc' },
         },
       })
+    const ownPosts = await Post.find({ author: currentUser._id })
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' },
+        },
+      })
+    const allPosts = [...followingPosts, ...ownPosts]
 
-    res.json(posts)
+    res.json(allPosts)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the posts.' })
   }
