@@ -5,6 +5,7 @@ const {
   createPost,
   updatePost,
   deletePost,
+  getNumberLikes,
   likePost,
   unlikePost,
   getAllPosts,
@@ -21,6 +22,7 @@ router.post('/', createPost)
 router.put('/:postId', updatePost)
 router.delete('/:postId', deletePost)
 
+router.get('/:postId/like', getNumberLikes)
 router.post('/:postId/like', likePost)
 router.delete('/:postId/like', unlikePost)
 
