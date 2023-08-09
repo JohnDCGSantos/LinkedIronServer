@@ -53,10 +53,11 @@ const deletePost = async (req, res) => {
 
 const likePost = async (req, res) => {
   try {
-    const { userId } = req.body
+    const { postId } = req.body
+    console.log(req.payload._id, postId, req.params)
     const post = await Post.findByIdAndUpdate(
       req.params.postId,
-      { $addToSet: { likes: userId } },
+      { $push: { likes: req.payload._id } },
       { new: true }
     )
     if (!post) {
@@ -86,10 +87,14 @@ const unlikePost = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while unliking the post.' })
   }
 }
-/*get all posts*/
+//Get all posts
 const getAllPosts = async (req, res) => {
+  console.log(req.payload)
   try {
-    const posts = await Post.find()
+    const currentUser = await User.findById(req.payload._id)
+
+    // Find posts by authors the user is following
+    const posts = await Post.find({ author: { $in: currentUser.following } })
       .populate('author')
       .populate({
         path: 'comments',
@@ -98,9 +103,10 @@ const getAllPosts = async (req, res) => {
           model: 'User',
         },
         options: {
-          sort: { createdAt: 'desc' }, // Sort comments by createdAt in descending order
+          sort: { createdAt: 'desc' },
         },
       })
+
     res.json(posts)
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the posts.' })
@@ -132,6 +138,27 @@ const getPostById = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching the post.' })
   }
 }
+const getAllPostsSearch = async (category, res) => {
+  try {
+    const posts = await Post.find({ category })
+      .populate('author')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User',
+        },
+        options: {
+          sort: { createdAt: 'desc' },
+        },
+      })
+
+    res.json(posts) // Send the fetched posts as the response
+  } catch (error) {
+    console.log('Error fetching posts by category', error)
+    res.status(500).json({ error: 'An error occurred while fetching posts by category.' })
+  }
+}
 
 module.exports = {
   createPost,
@@ -141,4 +168,5 @@ module.exports = {
   unlikePost,
   getAllPosts,
   getPostById,
+  getAllPostsSearch,
 }
