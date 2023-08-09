@@ -53,21 +53,30 @@ const deletePost = async (req, res) => {
 
 const likePost = async (req, res) => {
   try {
-    const { postId } = req.body
-    console.log(req.payload._id, postId, req.params)
-    const post = await Post.findByIdAndUpdate(
-      req.params.postId,
-      { $push: { likes: req.payload._id } },
-      { new: true }
-    )
+    const { postId } = req.params;
+    const userId = req.payload._id;
+
+    const post = await Post.findById(postId);
+
     if (!post) {
-      return res.status(404).json({ error: 'Post not found.' })
+      return res.status(404).json({ error: 'Post not found.' });
     }
-    res.json(post)
+
+    if (post.likes.includes(userId)) {
+      return res.status(400).json({ error: 'Post already liked by the user.' });
+    }
+
+    post.likes.push(userId);
+    await post.save();
+
+    const likesCount = post.likes.length;
+    res.json({ likesCount });
   } catch (error) {
-    console.log('like post error', error)
+    console.log('Like post error:', error);
+    res.status(500).json({ error: 'An error occurred while liking the post.' });
   }
-}
+};
+
 
 /*** Get Post Likes ***/
 const getNumberLikes = async (req, res) => {
@@ -88,21 +97,30 @@ const getNumberLikes = async (req, res) => {
 
 const unlikePost = async (req, res) => {
   try {
-    const { postId } = req.body
-    const post = await Post.findByIdAndUpdate(
-      req.params.postId,
-      { $pull: { likes: req.payload._id } },
-      { new: true }
-    )
+    const { postId } = req.params;
+    const userId = req.payload._id;
+
+    const post = await Post.findById(postId);
+
     if (!post) {
-      return res.status(404).json({ error: 'Post not found.' })
+      return res.status(404).json({ error: 'Post not found.' });
     }
 
-    res.json(post)
+    if (!post.likes.includes(userId)) {
+      return res.status(400).json({ error: 'Post is not liked by the user.' });
+    }
+
+    post.likes.pull(userId);
+    await post.save();
+
+    const likesCount = post.likes.length;
+    res.json({ likesCount });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while unliking the post.' })
+    console.log('Unlike post error:', error);
+    res.status(500).json({ error: 'An error occurred while unliking the post.' });
   }
-}
+};
+
 
 /*get all posts*/
 const getAllPosts = async (req, res) => {
