@@ -13,6 +13,7 @@ router.use(isAuthenticated);
 router.use(extractUserId);
 
 router.get('/', getUsers)
+router.get('/:userId', getUserProfile)
 
 router.put('/', updateUserData)
 
